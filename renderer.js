@@ -28,8 +28,9 @@ transcribeBtn.addEventListener('click', async () => {
     const outDir = filePath.substring(0, filePath.lastIndexOf('\\'));
 
     console.log('[renderer] Starting transcription...');
-    const result = await window.api.extractAudio(filePath, outDir);
-
+    const language = document.getElementById('language').value;
+    const result = await window.api.extractAudio(filePath, outDir, language);
+    
     if (typeof result === 'string') {
       outputEl.textContent = result;
       saveBtn.style.display = 'inline-block';

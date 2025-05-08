@@ -2,11 +2,11 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-function runTranscription(audioPath) {
+function runTranscription(audioPath, language = 'en') {
   const exePath = path.join(__dirname, 'whisper', 'whisper-cli.exe');
   const modelPath = path.join(__dirname, 'whisper', 'ggml-base.bin');
 
-  const command = `"${exePath}" -f "${audioPath}" -m "${modelPath}" -otxt -l en`;
+  const command = `"${exePath}" -f "${audioPath}" -m "${modelPath}" -otxt -l ${language}`;
   console.log('[transcribe] Running command:', command);
 
   return new Promise((resolve, reject) => {

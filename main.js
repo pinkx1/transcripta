@@ -26,7 +26,7 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-ipcMain.handle('extract-audio', async (event, filePath) => {
+ipcMain.handle('extract-audio', async (event, filePath, outDir, language = 'en') => {
   console.log('[extract-audio] Received:', filePath);
 
   const ext = path.extname(filePath);
@@ -56,7 +56,7 @@ ipcMain.handle('extract-audio', async (event, filePath) => {
       });
     });
 
-    const transcriptionText = await runTranscription(outputPath);
+    const transcriptionText = await runTranscription(outputPath, language);
     return transcriptionText;
 
   } catch (err) {
