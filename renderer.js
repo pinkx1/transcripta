@@ -31,8 +31,9 @@ transcribeBtn.addEventListener('click', async () => {
     const result = await window.api.extractAudio(filePath, outDir);
 
     if (typeof result === 'string') {
-      outputEl.textContent = `Transcription saved to:\n${result}`;
-    } else {
+      outputEl.textContent = result;
+      saveBtn.style.display = 'inline-block';
+          } else {
       alert('Error:\n' + result.error);
     }
   } catch (err) {
@@ -40,5 +41,16 @@ transcribeBtn.addEventListener('click', async () => {
   } finally {
     progressEl.style.display = 'none';
     transcribeBtn.disabled = false;
+  }
+});
+
+const saveBtn = document.getElementById('saveBtn');
+
+saveBtn.addEventListener('click', async () => {
+  const text = document.getElementById('output').textContent;
+  const result = await window.api.saveText(text);
+
+  if (result.success) {
+    alert('File saved successfully!');
   }
 });
