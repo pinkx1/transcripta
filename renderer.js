@@ -1,5 +1,9 @@
 let selectedFilePath = null;
 
+const progressEl = document.getElementById('progress');
+const transcribeBtn = document.getElementById('transcribeBtn');
+const outputEl = document.getElementById('output');
+
 document.getElementById('chooseBtn').addEventListener('click', async () => {
   const filePath = await window.api.openFile();
   if (filePath) {
@@ -9,20 +13,32 @@ document.getElementById('chooseBtn').addEventListener('click', async () => {
   }
 });
 
-document.getElementById('transcribeBtn').addEventListener('click', async () => {
+transcribeBtn.addEventListener('click', async () => {
   if (!selectedFilePath) {
     alert('Please choose a file first');
     return;
   }
 
-  const filePath = selectedFilePath;
-  const outDir = filePath.substring(0, filePath.lastIndexOf('\\'));
+  progressEl.style.display = 'block';
+  transcribeBtn.disabled = true;
+  outputEl.textContent = '';
 
-  const result = await window.api.extractAudio(filePath, outDir);
+  try {
+    const filePath = selectedFilePath;
+    const outDir = filePath.substring(0, filePath.lastIndexOf('\\'));
 
-  if (typeof result === 'string') {
-    document.getElementById('output').textContent = `Audio extracted:\n${result}`;
-  } else {
-    alert('Error:\n' + result.error);
+    console.log('[renderer] Starting transcription...');
+    const result = await window.api.extractAudio(filePath, outDir);
+
+    if (typeof result === 'string') {
+      outputEl.textContent = `Transcription saved to:\n${result}`;
+    } else {
+      alert('Error:\n' + result.error);
+    }
+  } catch (err) {
+    alert('Unexpected error:\n' + err.message);
+  } finally {
+    progressEl.style.display = 'none';
+    transcribeBtn.disabled = false;
   }
 });

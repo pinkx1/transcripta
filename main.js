@@ -3,6 +3,7 @@ const path = require('path');
 const { exec } = require('child_process');
 const { runTranscription } = require('./transcribeRunner');
 
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
